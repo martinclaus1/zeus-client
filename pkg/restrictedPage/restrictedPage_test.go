@@ -3,10 +3,9 @@ package restrictedPage
 import (
 	"github.com/golang/mock/gomock"
 	"github.com/playwright-community/playwright-go"
-	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"zeus-client/mocks"
+	"zeus-client/pkg/mocks"
 )
 
 func Test_That_NavigateToMyZeusView_Works(t *testing.T) {
@@ -15,8 +14,7 @@ func Test_That_NavigateToMyZeusView_Works(t *testing.T) {
 	defer mockCtrl.Finish()
 	mockPage := mocks.NewMockPage(mockCtrl)
 	page := playwright.Page(mockPage)
-	logger, _ := test.NewNullLogger()
-	restrictedPage := Instance(&page, logger)
+	restrictedPage := Instance(&page)
 
 	gomock.InOrder(
 		mockPage.EXPECT().WaitForSelector(restrictedPage.refreshIcon, gomock.Any()).Return(nil, nil).Times(1),
@@ -38,11 +36,13 @@ func Test_That_GetStatus_Works(t *testing.T) {
 	defer mockCtrl.Finish()
 	mockPage := mocks.NewMockPage(mockCtrl)
 	page := playwright.Page(mockPage)
-	logger, _ := test.NewNullLogger()
-	restrictedPage := Instance(&page, logger)
+	restrictedPage := Instance(&page)
 	myZeusView := instance(restrictedPage)
-	testCases := []struct{ zeusStatus, expectedStatus string }{
-		{"Abwesend", "abwesend"}, {"Anwesend", "anwesend"},
+	testCases := []struct {
+		zeusStatus     string
+		expectedStatus PresenceStatus
+	}{
+		{"Abwesend", Absent}, {"Anwesend", Present},
 	}
 
 	for _, testCase := range testCases {
@@ -64,8 +64,7 @@ func Test_That_ToggleStatus_Works(t *testing.T) {
 	defer mockCtrl.Finish()
 	mockPage := mocks.NewMockPage(mockCtrl)
 	page := playwright.Page(mockPage)
-	logger, _ := test.NewNullLogger()
-	restrictedPage := Instance(&page, logger)
+	restrictedPage := Instance(&page)
 	myZeusView := instance(restrictedPage)
 	testCases := []struct{ zeusStatusBefore, statusButton, zeusStatusAfter string }{
 		{"Abwesend", myZeusView.presentButton, "Anwesend"},

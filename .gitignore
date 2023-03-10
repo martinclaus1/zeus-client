@@ -1,4 +1,4 @@
 zeus-client.log
 .idea
-bin
-mocks
+bin/
+mocks/
