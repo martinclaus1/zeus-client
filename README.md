@@ -6,27 +6,33 @@ This is an unofficial client for the ZEUS® time tracking system. It's a private
 
 ## Usage
 
-Run `zeus-client -help` to get a list of all available commands.
+Run `zeus-client --help` to get a list of all available commands.
 
 Example output:
 
 ```bash
-zeus-client is a script to toggle the presence status in Zeus time tracking tool.
+zeus-client is a CLI for the ZEUS time tracking tool. 
+It allows you to toggle your presence state and get information about your current presence state, for example:
+zeus-client toggle
+zeus-client get status
 
-options:
-  -debug
-        Enables debug mode (default true)
-  -dry-run
-        Does a dry run without toggling the presence state
-  -password string
-        Password for the zeus time tracking tool. If not provided, the script will prompt for the password.
-  -silent
-        Runs the selenium script in headless mode (default true)
-  -user string
-        Username for the zeus time tracking tool
+Usage:
+  zeus-client [command]
 
-example usage:
-  zeus-client -user <username>
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  get         Gets information from ZEUS time tracking tool
+  help        Help about any command
+  toggle      Toggles the presence state in ZEUS time tracking tool.
+
+Flags:
+  -d, --debug             Enable debug mode
+      --headless          Runs the playwright script in headless mode (default true)
+  -h, --help              help for zeus-client
+  -p, --password string   Password for the ZEUS time tracking tool. If not provided, the script will prompt for the password
+  -u, --username string   Username for the ZEUS time tracking tool
+
+Use "zeus-client [command] --help" for more information about a command.
 ```
 
 ## Error reporting

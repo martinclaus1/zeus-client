@@ -4,9 +4,11 @@ package loginPage
 
 import (
 	"github.com/playwright-community/playwright-go"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
+	"time"
+	"zeus-client/pkg"
+	"zeus-client/pkg/restrictedPage"
 )
-import "zeus-client/restrictedPage"
 
 type LoginPage struct {
 	url           string
@@ -14,40 +16,39 @@ type LoginPage struct {
 	usernameInput string
 	passwordInput string
 	loginButton   string
-	logger        *logrus.Logger
 }
 
-func Instance(page *playwright.Page, logger *logrus.Logger) *LoginPage {
+func Instance(page *playwright.Page) *LoginPage {
 	return &LoginPage{
 		url:           "https://saas.isgus.de/zeusxF/Environment/Account/LogOn.aspx?&AspxAutoDetectCookieSupport=0",
 		page:          page,
 		usernameInput: "//input[@name='uiUserName']",
 		passwordInput: "//input[@name='uiPassword']",
 		loginButton:   "div#uiLogOnButton",
-		logger:        logger,
 	}
 }
 
 func (l *LoginPage) Login(username string, password string) *restrictedPage.RestrictedPage {
-	l.logger.Infoln("Navigating to ZEUS login page")
+	defer pkg.Measure(time.Now(), "Login")
+	log.Infoln("Navigating to ZEUS login page.")
 	if _, err := (*l.page).Goto(l.url); err != nil {
-		l.logger.Fatalf("Could not navigate to the Zeus service: %v", err)
+		log.WithField("error", err).Fatalln("Could not navigate to ZEUS login page.")
 	}
 
-	l.logger.Debugln("Type username")
+	log.Debugln("Type username")
 	if err := (*l.page).Type(l.usernameInput, username); err != nil {
-		l.logger.Fatalf("Could not type user name: %v", err)
+		log.WithField("error", err).Fatalln("Could not type user name.")
 	}
 
-	l.logger.Debugln("Type password")
+	log.Debugln("Type password")
 	if err := (*l.page).Type(l.passwordInput, password); err != nil {
-		l.logger.Fatalf("Could not type password: %v", err)
+		log.WithField("error", err).Fatalln("Could not type password.")
 	}
 
-	l.logger.Infoln("Logging in")
+	log.Infoln("Logging in")
 	if err := (*l.page).Click(l.loginButton); err != nil {
-		l.logger.Fatalf("Could not login: %v", err)
+		log.WithField("error", err).Fatalln("Could not login.")
 	}
 
-	return restrictedPage.Instance(l.page, l.logger)
+	return restrictedPage.Instance(l.page)
 }
