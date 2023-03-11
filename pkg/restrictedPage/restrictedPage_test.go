@@ -2,10 +2,10 @@ package restrictedPage
 
 import (
 	"github.com/golang/mock/gomock"
+	"github.com/martinclaus1/zeus-client/pkg/mocks"
 	"github.com/playwright-community/playwright-go"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"zeus-client/pkg/mocks"
 )
 
 func Test_That_NavigateToMyZeusView_Works(t *testing.T) {
