@@ -1,11 +1,11 @@
 package restrictedPage
 
 import (
+	"github.com/martinclaus1/zeus-client/pkg"
 	"github.com/playwright-community/playwright-go"
 	log "github.com/sirupsen/logrus"
 	"strings"
 	"time"
-	"zeus-client/pkg"
 )
 
 type RestrictedPage struct {

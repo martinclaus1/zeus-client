@@ -15,6 +15,8 @@ import (
 
 var configFilePath = ""
 var machineId = ""
+var configFolderPath = ""
+var logFolderPath = ""
 
 const appName = "zeus-client"
 const configFileName = "config"
@@ -25,15 +27,15 @@ func init() {
 		log.WithField("error", err).Fatalln("Could not get user home directory.")
 	}
 
-	path := homeDir + filepath.FromSlash("/."+appName)
-	if _, err = os.Stat(path); errors.Is(err, os.ErrNotExist) {
-		err = os.MkdirAll(path, os.ModePerm)
+	configFolderPath = homeDir + filepath.FromSlash("/."+appName)
+	logFolderPath = configFolderPath + filepath.FromSlash("/logs")
+	if _, err = os.Stat(logFolderPath); errors.Is(err, os.ErrNotExist) {
+		err = os.MkdirAll(logFolderPath, os.ModePerm)
 		if err != nil {
 			log.WithField("error", err).Fatalln("Could not create config directory.")
 		}
 	}
-
-	configFilePath = path + filepath.FromSlash("/"+configFileName)
+	configFilePath = configFolderPath + filepath.FromSlash("/"+configFileName)
 
 	machineId, err = machineid.ProtectedID(appName)
 	if len(machineId) < 24 {
@@ -81,6 +83,10 @@ func ReadConfig() *Config {
 	}
 
 	return &config
+}
+
+func GetLogfilePath() string {
+	return logFolderPath + filepath.FromSlash("/zeus-client.log")
 }
 
 var bytes = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}

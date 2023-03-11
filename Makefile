@@ -1,4 +1,5 @@
 build:
+	go mod tidy
 	go build -v ./...
 mocks: build
 	go install github.com/golang/mock/mockgen@v1.6.0

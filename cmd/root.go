@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	buildConfig "github.com/martinclaus1/zeus-client/config"
+	"github.com/martinclaus1/zeus-client/pkg"
+	"github.com/martinclaus1/zeus-client/pkg/logging"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
@@ -10,9 +13,6 @@ import (
 	"os"
 	"strings"
 	"syscall"
-	buildConfig "zeus-client/config"
-	"zeus-client/pkg"
-	"zeus-client/pkg/logging"
 )
 
 var debugMode bool

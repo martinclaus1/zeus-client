@@ -3,11 +3,11 @@ package loginPage
 //go:generate mockgen -destination=../mocks/mock_page.go -package=mocks github.com/playwright-community/playwright-go Page
 
 import (
+	"github.com/martinclaus1/zeus-client/pkg"
+	"github.com/martinclaus1/zeus-client/pkg/restrictedPage"
 	"github.com/playwright-community/playwright-go"
 	log "github.com/sirupsen/logrus"
 	"time"
-	"zeus-client/pkg"
-	"zeus-client/pkg/restrictedPage"
 )
 
 type LoginPage struct {

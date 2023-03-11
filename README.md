@@ -5,6 +5,8 @@ This is an unofficial client for the ZEUS® time tracking tool.
 
 Just download the binaries for your platform from the [releases page](https://github.com/martinclaus1/zeus-client/releases/latest).
 
+[//]: # (TODO: Add installation instructions for go install)
+
 ## Documentation
 
 The documentation can be found [here](documentation/zeus-client.md).

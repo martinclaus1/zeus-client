@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/martinclaus1/zeus-client/cmd"
 	"os"
 	"strings"
-	"zeus-client/cmd"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package cmd
 
 import (
+	"github.com/martinclaus1/zeus-client/pkg"
 	"github.com/spf13/cobra"
-	"zeus-client/pkg"
 )
 
 // setupCmd represents the setup command
