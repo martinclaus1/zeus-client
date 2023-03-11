@@ -1,6 +1,6 @@
 name: Build
 
-on: [push]
+on: [ push ]
 
 jobs:
   build:
@@ -16,9 +16,12 @@ jobs:
       - name: Build and test
         run: make test
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Build release
         if: startsWith(github.ref, 'refs/tags/')
         run: make release version="${{github.ref_name}}"
+
+      - name: Upload release binaries
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: bin/*.zip
