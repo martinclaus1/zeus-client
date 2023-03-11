@@ -21,3 +21,10 @@ do
 		exit 1
 	fi
 done
+
+cd bin || exit
+for d in */ ; do
+    echo "Creating zip for ${d%/}:"
+    zip -r "${d%/}.zip" "$d"
+    zip -sf "${d%/}.zip"
+done
