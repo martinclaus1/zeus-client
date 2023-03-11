@@ -9,4 +9,4 @@ test: mocks
 	go test -v ./... -count=1
 release:
 	chmod +x ./build.sh
-	./build.sh
+	./build.sh $(version)

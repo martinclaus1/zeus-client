@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-
+version=${1:-"dev"}
 package=main.go
-
 platforms=("windows/amd64" "darwin/amd64"  "darwin/arm64" "linux/amd64" "linux/arm64")
 
 rm -rf bin
@@ -10,7 +9,7 @@ do
 	platform_split=(${platform//\// })
 	GOOS=${platform_split[0]}
 	GOARCH=${platform_split[1]}
-	output_name='bin/'$GOOS'/'$GOARCH'/zeus-client'
+	output_name='bin/zeus-client-'$version'-'$GOOS'/'$GOARCH'/zeus-client'
 	if [ $GOOS = "windows" ]; then
 		output_name+='.exe'
 	fi
