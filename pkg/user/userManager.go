@@ -1,55 +1,21 @@
-package pkg
+package user
 
 import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
 	"encoding/json"
-	"errors"
-	"github.com/denisbrodbeck/machineid"
+	"github.com/martinclaus1/zeus-client/pkg/initializer"
 	log "github.com/sirupsen/logrus"
 	"os"
-	"path/filepath"
-	"strings"
 )
 
-var configFilePath = ""
-var machineId = ""
-var configFolderPath = ""
-var logFolderPath = ""
-
-const appName = "zeus-client"
-const configFileName = "config"
-
-func init() {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		log.WithField("error", err).Fatalln("Could not get user home directory.")
-	}
-
-	configFolderPath = homeDir + filepath.FromSlash("/."+appName)
-	logFolderPath = configFolderPath + filepath.FromSlash("/logs")
-	if _, err = os.Stat(logFolderPath); errors.Is(err, os.ErrNotExist) {
-		err = os.MkdirAll(logFolderPath, os.ModePerm)
-		if err != nil {
-			log.WithField("error", err).Fatalln("Could not create config directory.")
-		}
-	}
-	configFilePath = configFolderPath + filepath.FromSlash("/"+configFileName)
-
-	machineId, err = machineid.ProtectedID(appName)
-	if len(machineId) < 24 {
-		machineId += strings.Repeat("a", 24-len(machineId))
-	} else {
-		machineId = machineId[0:24]
-	}
-
-	if err != nil {
-		log.WithField("error", err).Fatalln("Could not get machine id.")
-	}
+type User struct {
+	Username string
+	Password string
 }
 
-func (config *Config) Save() {
+func (config *User) Save() {
 	content, err := json.Marshal(config)
 	if err != nil {
 		log.WithField("error", err).Fatalln("Could not marshal config.")
@@ -60,33 +26,29 @@ func (config *Config) Save() {
 		log.WithField("error", err).Fatalln("Could not encrypt config.")
 	}
 
-	err = os.WriteFile(configFilePath, []byte(encryptedContent), 0600)
+	err = os.WriteFile(initializer.GetBaseConfig().ConfigFilePath(), []byte(encryptedContent), 0600)
 	if err != nil {
 		log.WithField("error", err).Fatalln("Could not write config file.")
 	}
 }
 
-func ReadConfig() *Config {
-	content, err := os.ReadFile(configFilePath)
+func ReadConfig() *User {
+	content, err := os.ReadFile(initializer.GetBaseConfig().ConfigFilePath())
 	if os.IsNotExist(err) {
-		return &Config{}
+		return &User{}
 	} else if err != nil {
 		log.WithField("error", err).Fatalln("Could not read config file.")
 	}
 
 	decryptedContent, _ := decrypt(string(content))
 
-	var config Config
+	var config User
 	err = json.Unmarshal(decryptedContent, &config)
 	if err != nil {
 		log.WithField("error", err).Fatalln("Could not unmarshal config.")
 	}
 
 	return &config
-}
-
-func GetLogfilePath() string {
-	return logFolderPath + filepath.FromSlash("/zeus-client.log")
 }
 
 var bytes = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
@@ -103,7 +65,7 @@ func decode(s string) []byte {
 }
 
 func encrypt(text string) (string, error) {
-	block, err := aes.NewCipher([]byte(machineId))
+	block, err := aes.NewCipher([]byte(initializer.GetBaseConfig().MachineId()))
 	if err != nil {
 		return "", err
 	}
@@ -115,7 +77,7 @@ func encrypt(text string) (string, error) {
 }
 
 func decrypt(text string) ([]byte, error) {
-	block, err := aes.NewCipher([]byte(machineId))
+	block, err := aes.NewCipher([]byte(initializer.GetBaseConfig().MachineId()))
 	if err != nil {
 		return nil, err
 	}
@@ -124,9 +86,4 @@ func decrypt(text string) ([]byte, error) {
 	plainText := make([]byte, len(cipherText))
 	cfb.XORKeyStream(plainText, cipherText)
 	return plainText, nil
-}
-
-type Config struct {
-	Username string
-	Password string
 }

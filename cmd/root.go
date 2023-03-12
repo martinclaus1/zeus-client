@@ -5,6 +5,7 @@ import (
 	buildConfig "github.com/martinclaus1/zeus-client/config"
 	"github.com/martinclaus1/zeus-client/pkg"
 	"github.com/martinclaus1/zeus-client/pkg/logging"
+	"github.com/martinclaus1/zeus-client/pkg/user"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
@@ -47,7 +48,7 @@ func init() {
 		logging.SetupLogging(debugMode)
 		pkg.InstallPlaywright()
 
-		config := pkg.ReadConfig()
+		config := user.ReadConfig()
 
 		// try username from config if username is not provided
 		if username == "" {
@@ -69,7 +70,7 @@ func init() {
 
 		if password == "" {
 			fmt.Print("Password: ")
-			bytepw, err := term.ReadPassword(int(syscall.Stdin))
+			bytepw, err := term.ReadPassword(syscall.Stdin)
 			if err != nil {
 				logrus.Fatalln("Could not read password")
 			}

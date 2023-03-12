@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/martinclaus1/zeus-client/pkg"
+	"github.com/martinclaus1/zeus-client/pkg/user"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ The machine id is used as the encryption key.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		username, _ := rootCmd.PersistentFlags().GetString("username")
 		password, _ := rootCmd.PersistentFlags().GetString("password")
-		config := pkg.Config{Username: username, Password: password}
+		config := user.User{Username: username, Password: password}
 		config.Save()
 	},
 }
