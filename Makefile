@@ -13,3 +13,6 @@ release:
 	./build.sh $(version)
 docs:
 	go run main.go generate-docs
+changelog:
+	npm install -g auto-changelog
+	auto-changelog
