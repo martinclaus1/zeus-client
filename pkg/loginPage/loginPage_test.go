@@ -2,11 +2,11 @@ package loginPage
 
 import (
 	"github.com/golang/mock/gomock"
+	"github.com/martinclaus1/zeus-client/pkg/mocks"
+	"github.com/martinclaus1/zeus-client/pkg/restrictedPage"
 	"github.com/playwright-community/playwright-go"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"zeus-client/pkg/mocks"
-	"zeus-client/pkg/restrictedPage"
 )
 
 func Test_That_Login_Executes_The_Commands_In_The_Correct_Order(t *testing.T) {

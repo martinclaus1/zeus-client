@@ -2,8 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	buildConfig "zeus-client/config"
-
+	buildConfig "github.com/martinclaus1/zeus-client/config"
 	"github.com/spf13/cobra"
 )
 

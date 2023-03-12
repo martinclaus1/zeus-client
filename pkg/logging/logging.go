@@ -1,6 +1,7 @@
 package logging
 
 import (
+	"github.com/martinclaus1/zeus-client/pkg/initializer"
 	"github.com/sirupsen/logrus"
 	"io"
 	"log"
@@ -33,7 +34,7 @@ func (hook *FormatterHook) Levels() []logrus.Level {
 
 func SetupLogging(debugMode bool) {
 	log.SetOutput(logrus.StandardLogger().Writer())
-	file, err := os.OpenFile("zeus-client.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	file, err := os.OpenFile(initializer.GetBaseConfig().LogFilePath(), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		logrus.Info("Failed to logger to file, using default stderr")
 	}
@@ -74,7 +75,7 @@ func SetupLogging(debugMode bool) {
 	logrus.AddHook(&FormatterHook{
 		Writer:    file,
 		LogLevels: logrus.AllLevels,
-		Formatter: &logrus.JSONFormatter{},
+		Formatter: textFormatter,
 	})
 
 	logrus.SetReportCaller(true)

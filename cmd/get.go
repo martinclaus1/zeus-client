@@ -1,11 +1,11 @@
 package cmd
 
 import (
+	"github.com/martinclaus1/zeus-client/pkg"
+	"github.com/martinclaus1/zeus-client/pkg/loginPage"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"time"
-	"zeus-client/pkg"
-	"zeus-client/pkg/loginPage"
 )
 
 var getCmd = &cobra.Command{
