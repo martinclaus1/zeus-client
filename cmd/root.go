@@ -70,7 +70,7 @@ func init() {
 
 		if password == "" {
 			fmt.Print("Password: ")
-			bytepw, err := term.ReadPassword(syscall.Stdin)
+			bytepw, err := term.ReadPassword(int(syscall.Stdin))
 			if err != nil {
 				logrus.Fatalln("Could not read password")
 			}
