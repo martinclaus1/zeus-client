@@ -22,12 +22,12 @@ var getCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		defer pkg.Measure(time.Now(), "get status")
+		arg := args[0]
+		defer pkg.Measure(time.Now(), "get "+arg)
 		headless, _ := rootCmd.PersistentFlags().GetBool("headless")
 		username, _ := rootCmd.PersistentFlags().GetString("username")
 		password, _ := rootCmd.PersistentFlags().GetString("password")
 
-		arg := args[0]
 		if "status" == arg {
 			page := pkg.GetPage(&headless)
 			currentStatus := loginPage.Instance(&page).Login(username, password).NavigateToMyZeusView().GetStatus()
