@@ -36,7 +36,8 @@ var getCmd = &cobra.Command{
 
 		if "overview" == arg {
 			page := pkg.GetPage(&headless)
-			loginPage.Instance(&page).Login(username, password).NavigateToMyZeusView().PrintOverview()
+			overview, _ := loginPage.Instance(&page).Login(username, password).NavigateToMyZeusView().GetOverview()
+			overview.Print()
 		}
 	},
 }
