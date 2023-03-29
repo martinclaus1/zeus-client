@@ -9,9 +9,9 @@ import (
 )
 
 var getCmd = &cobra.Command{
-	Use:       "get status",
+	Use:       "get status|overview",
 	Short:     "Gets information from ZEUS® time tracking tool.",
-	ValidArgs: []string{"status"},
+	ValidArgs: []string{"status", "overview"},
 	Args: func(cmd *cobra.Command, args []string) error {
 		if err := cobra.OnlyValidArgs(cmd, args); err != nil {
 			return err
@@ -27,10 +27,16 @@ var getCmd = &cobra.Command{
 		username, _ := rootCmd.PersistentFlags().GetString("username")
 		password, _ := rootCmd.PersistentFlags().GetString("password")
 
-		if "status" == args[0] {
+		arg := args[0]
+		if "status" == arg {
 			page := pkg.GetPage(&headless)
 			currentStatus := loginPage.Instance(&page).Login(username, password).NavigateToMyZeusView().GetStatus()
 			log.Infof("Current status: %s", currentStatus)
+		}
+
+		if "overview" == arg {
+			page := pkg.GetPage(&headless)
+			loginPage.Instance(&page).Login(username, password).NavigateToMyZeusView().PrintOverview()
 		}
 	},
 }

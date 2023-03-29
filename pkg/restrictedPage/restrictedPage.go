@@ -1,8 +1,10 @@
 package restrictedPage
 
 import (
+	"github.com/fatih/color"
 	"github.com/martinclaus1/zeus-client/pkg"
 	"github.com/playwright-community/playwright-go"
+	"github.com/rodaine/table"
 	log "github.com/sirupsen/logrus"
 	"strings"
 	"time"
@@ -90,6 +92,33 @@ func (m *MyZeusView) GetStatus() PresenceStatus {
 	}
 
 	return mappedStatus
+}
+
+func (m *MyZeusView) PrintOverview() {
+	defer pkg.Measure(time.Now(), "PrintOverview")
+	m.refresh()
+	text, err := (*m.parent.page).InnerText(".account-info-result")
+	if err != nil {
+		log.WithField("error", err).Fatalf("Could not get the overview.")
+	}
+
+	printTable(text)
+}
+
+func printTable(content string) {
+	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
+	columnFmt := color.New(color.FgYellow).SprintfFunc()
+
+	tbl := table.New("Position", "Value")
+	tbl.WithPadding(6)
+	tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
+
+	split := strings.Split(content, "\n")
+	for i := 0; i < len(split)-1; i += 2 {
+		tbl.AddRow(split[i], split[i+1])
+	}
+
+	tbl.Print()
 }
 
 func (m *MyZeusView) ToggleStatus() {
